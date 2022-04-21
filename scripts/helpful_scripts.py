@@ -1,9 +1,15 @@
 from brownie import accounts, network, config, Contract, VRFCoordinatorMock, LinkToken
 from web3 import Web3
 
-LOCAL_BLOCKCHAIN_ENV = ["development", "ganache-local"]
-FORKED_LOCAL_ENV = ["mainnet-fork"]
+LOCAL_BLOCKCHAIN_ENV = ["development", "ganache-local", "mainnet-fork"]
 OPENSEA_URL = "https://testnets.opensea.io/assets/{}/{}"
+TYPE_MAPPING = {0: "Fire", 1: "Ice", 2: "Dark", 3: "Ghost"}
+POKEMON_DESCRIPTION_MAPPING = {
+    "Fire": "He is immune to being burned.",
+    "Ice": "He controls ice at will.",
+    "Dark": "He is cruel, craftyand clever.",
+    "Ghost": "He usually lives in an abandoned house, cemeteries and caves",
+}
 
 
 def get_account(index=None, id=None):
@@ -14,10 +20,7 @@ def get_account(index=None, id=None):
         return accounts[index]
     if id:
         return accounts.load(id)
-    if (
-        network.show_active() in LOCAL_BLOCKCHAIN_ENV
-        or network.show_active() in FORKED_LOCAL_ENV
-    ):
+    if network.show_active() in LOCAL_BLOCKCHAIN_ENV:
         return accounts[0]
 
     return accounts.add(config["wallets"]["from_key"])
@@ -54,7 +57,7 @@ def get_contract(contract_name):
     else:
         contract_address = config["networks"][network.show_active()][contract_name]
         contract = Contract.from_abi(
-            contract_type.name, contract_address, contract_type.abi
+            contract_type._name, contract_address, contract_type.abi
         )
     return contract
 
@@ -83,3 +86,11 @@ def fund_with_link(
     tx = link_token.transfer(contract_address, amount, {"from": account})
     tx.wait(1)
     print("Contract Funded!")
+
+
+def get_pokemonType(pokemonTypeNo):
+    return TYPE_MAPPING[pokemonTypeNo]
+
+
+def get_pokemonDescription(pokemonType):
+    return POKEMON_DESCRIPTION_MAPPING[pokemonType]

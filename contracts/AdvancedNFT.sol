@@ -14,7 +14,7 @@ contract AdvancedNFT is ERC721, VRFConsumerBase {
     bytes32 public keyHash;
     uint256 public fee;
 
-    enum PokemonType{Fire, Dark, Ice, Ghost}
+    enum PokemonType{Fire, Ice, Dark, Ghost}
     mapping(uint256 => PokemonType) public tokenIdToType;
     mapping(bytes32 => address) public requestIdToSender;
     mapping (uint256 => string) private _tokenURIs;
@@ -58,7 +58,7 @@ contract AdvancedNFT is ERC721, VRFConsumerBase {
         tokenCounter += 1;
     }
 
-    function _setTokenURI(uint256 _tokenId, string memory _tokenURI) internal virtual {
+    function _setTokenURI(uint256 _tokenId, string memory _tokenURI) public virtual {
         require(_exists(_tokenId), "ERC721Metadata: URI set of nonexistent token");
         _tokenURIs[_tokenId] = _tokenURI;
     }
