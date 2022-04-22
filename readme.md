@@ -1,4 +1,4 @@
-# **Project-Pikachu : **
+# **Project-Pikachu :**
 
 _A Simple ERC721 demonstration contract wich shows some concepts like :_
 
